@@ -11,6 +11,12 @@ class Vector:
     
     def __mul__(self, c):
         return Vector(c*self.X(), c*self.Y())
+    
+    def __rmul__(self, c):
+        return self.__mul__(c)
+    
+    def __sub__(self, b):
+        return Vector(self.X() - b.X(), self.Y() - b.Y())
 
     def X(self):
         return self.x
@@ -18,8 +24,14 @@ class Vector:
     def Y(self):
         return self.y
     
+    def setX(self, x):
+        self.x = x
+
+    def setY(self, y):
+        self.y = y
+    
     def vector_length(self):
-        return (self.X**2 + self.Y**2)**(1/2)
+        return (self.X()**2 + self.Y()**2)**(1/2)
 
 def dot_product(a, b):
     return Vector(a.X()*b.X(), a.Y()*b.Y())
