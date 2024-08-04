@@ -6,6 +6,12 @@ class Vector:
         self.x = x
         self.y = y
 
+    def __add__(self, b):
+        return Vector(self.X() + b.X(), self.Y() + b.Y())
+    
+    def __mul__(self, c):
+        return Vector(c*self.X(), c*self.Y())
+
     def X(self):
         return self.x
 
