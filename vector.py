@@ -32,9 +32,17 @@ class Vector:
     
     def vector_length(self):
         return (self.X()**2 + self.Y()**2)**(1/2)
+    
+    def normalize(self):
+        self = (1/math.sqrt(self.vector_length()))*self
+    
+    def project_onto(self, b):
+        if (b.vector_length() != 1):
+            return (dot_product(self, b)*b)*math.pow(b.vector_length(), -2)
+        return dot_product(self, b)*b
 
 def dot_product(a, b):
-    return Vector(a.X()*b.X(), a.Y()*b.Y())
+    return a.X()*b.X() + a.Y()*b.Y()
 
 def angle_vectors(a, b):
     return math.acos(dot_product(a, b)/(a.vector_length()*b.vector_length()))

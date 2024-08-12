@@ -23,7 +23,12 @@ class Simulation:
 
         self.apply_gravity()
 
-    def draw()
+    def draw(self, screen):
+
+        #Добавить рисование поля
+
+        for i in range(len(self.particles)):
+            self.particles[i].draw(screen)
 
     def apply_gravity(self):
         for j in range(len(self.particles)):
