@@ -1,6 +1,7 @@
 import pygame
 import math
 from vector import *
+from wall import *
 
 class RigidBody:
 
@@ -51,6 +52,24 @@ def circles_collision(p1, p2):
         return True
 
     return False
+
+def wall_scattering(p, wall):
+    i = Vector(1, 0)
+    j = Vector(0, 1)
+
+    if wall.getSide() == "top":
+        p.setPosition(Vector(p.getPosition().X(), wall.getPosition() + p.getRadius()))
+        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity()) + (dot_product(j, p.getVelocity().Y())/math.abs(dot_product(j, p.getVelocity().Y())))*p.getVelocity().Y())
+    elif wall.getSide() == "bottom":
+        p.setPosition(Vector(p.getPosition().X(), wall.getPosition() - p.getRadius()))
+        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity()) + (dot_product(-j, p.getVelocity().Y())/math.abs(dot_product(-j, p.getVelocity().Y())))*p.getVelocity().Y())
+    elif wall.getSide() == "left":
+        p.setPosition(Vector(wall.getPosition() + p.getRadius(), p.getPosition().Y()))
+        p.setVelocity(Vector(wall.getVelocity()) + (dot_product(i, p.getVelocity().X())/math.abs(dot_product(i, p.getVelocity().X())))*p.getVelocity().X(), p.getVelocity().Y())
+    elif wall.getSide() == "right":
+        p.setPosition(Vector(wall.getPosition() - p.getRadius(), p.getPosition().Y()))
+        p.setVelocity(Vector(wall.getVelocity()) + (dot_product(-i, p.getVelocity().X())/math.abs(dot_product(-i, p.getVelocity().X())))*p.getVelocity().X(), p.getVelocity().Y())
+
 
 def circles_scatter(p1, p2):
 
