@@ -59,16 +59,16 @@ def wall_scattering(p, wall):
 
     if wall.getSide() == "top":
         p.setPosition(Vector(p.getPosition().X(), wall.getPosition() + p.getRadius()))
-        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity()) + (dot_product(j, p.getVelocity().Y())/math.abs(dot_product(j, p.getVelocity().Y())))*p.getVelocity().Y())
+        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity() + math.copysign(dot_product(j, p.getVelocity()), 1)*p.getVelocity().Y()))
     elif wall.getSide() == "bottom":
         p.setPosition(Vector(p.getPosition().X(), wall.getPosition() - p.getRadius()))
-        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity()) + (dot_product(-j, p.getVelocity().Y())/math.abs(dot_product(-j, p.getVelocity().Y())))*p.getVelocity().Y())
+        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity() + math.copysign(dot_product((-1)*j, p.getVelocity()), 1)*p.getVelocity().Y()))
     elif wall.getSide() == "left":
         p.setPosition(Vector(wall.getPosition() + p.getRadius(), p.getPosition().Y()))
-        p.setVelocity(Vector(wall.getVelocity()) + (dot_product(i, p.getVelocity().X())/math.abs(dot_product(i, p.getVelocity().X())))*p.getVelocity().X(), p.getVelocity().Y())
+        p.setVelocity(Vector(wall.getVelocity() + math.copysign(dot_product(i, p.getVelocity()), 1)*p.getVelocity().X(), p.getVelocity().Y()))
     elif wall.getSide() == "right":
         p.setPosition(Vector(wall.getPosition() - p.getRadius(), p.getPosition().Y()))
-        p.setVelocity(Vector(wall.getVelocity()) + (dot_product(-i, p.getVelocity().X())/math.abs(dot_product(-i, p.getVelocity().X())))*p.getVelocity().X(), p.getVelocity().Y())
+        p.setVelocity(Vector(wall.getVelocity() + math.copysign(dot_product((-1)*i, p.getVelocity()), 1)*p.getVelocity().X(), p.getVelocity().Y()))
 
 
 def circles_scatter(p1, p2):
@@ -110,7 +110,7 @@ def circles_scatter(p1, p2):
 
     p1.setPosition(p1.getPosition() + dl1)
     p2.setPosition(p2.getPosition() + dl2)
-
+"""
 p1 = Particle(Vector(1, 0), Vector(1, 0), 1, 2)
 p2 = Particle(Vector(2, 0), Vector(0, 0), 1, 2)
 
@@ -120,3 +120,4 @@ circles_scatter(p1, p2)
 
 print("x1", p1.getPosition().X(), "y1", p1.getPosition().Y(), "x2", p2.getPosition().X(), "y2", p2.getPosition().Y())
 print(p1.getVelocity().X(), p1.getVelocity().Y(), p2.getVelocity().X(), p2.getVelocity().Y())
+"""
