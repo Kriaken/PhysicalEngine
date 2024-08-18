@@ -14,8 +14,17 @@ class Simulation:
 
         if len(walls) != 0:
             self.walls = walls
+
+            twalls = []
+
+            twalls.append(self.find_wall(Wall.getSide("top")).setPosition(0))
+            twalls.append(self.find_wall(Wall.getSide("bottom")).setPosition(self.height))
+            twalls.append(self.find_wall(Wall.getSide("left")).setPosition(0))
+            twalls.append(self.find_wall(Wall.getSide("right")).setPosition(self.width))
+
+            self.walls = twalls
         else:
-            self.walls = [Wall("up", 0, 0, 0), Wall("down", 0, 0, height), Wall("left", 0, 0, 0), Wall("right", 0, 0, width)]
+            self.walls = [Wall("top", 0, 0, 0), Wall("bottom", 0, 0, height), Wall("left", 0, 0, 0), Wall("right", 0, 0, width)]
 
     def time_step(self):
         i = 0
@@ -23,7 +32,7 @@ class Simulation:
         #colissions
         while(i < self.substeps):
             for j in range(len(self.particles)):
-                #self.wall_collision(self.particles[j])
+                self.wall_collision(self.particles[j])
                 for k in range(j+1, len(self.particles)):
                     if(circles_collision(self.particles[j], self.particles[k])):
                         circles_scatter(self.particles[j], self.particles[k])
@@ -50,17 +59,21 @@ class Simulation:
         for wall in self.walls:
             if side == wall.getSide():
                 return wall
-            
+
         return 0
 
     def wall_collision(self, particle):
 
         if particle.getPosition().X() - self.find_wall("left").getPosition() <= particle.getRadius():
+            
             wall_scattering(particle, self.find_wall("left"))
-        if particle.getPosition().X() - self.find_wall("right").getPosition() >= particle.getRadius():
+        if particle.getPosition().X() >= self.find_wall("right").getPosition() - particle.getRadius():
+
             wall_scattering(particle, self.find_wall("right"))
         if particle.getPosition().Y() - self.find_wall("top").getPosition() <= particle.getRadius():
+            
             wall_scattering(particle, self.find_wall("top"))
-        if particle.getPosition().Y() - self.find_wall("bottom").getPosition() >= particle.getRadius():
+        if particle.getPosition().Y() >= self.find_wall("bottom").getPosition() - particle.getRadius():
+            
             wall_scattering(particle, self.find_wall("bottom"))
         

@@ -59,16 +59,16 @@ def wall_scattering(p, wall):
 
     if wall.getSide() == "top":
         p.setPosition(Vector(p.getPosition().X(), wall.getPosition() + p.getRadius()))
-        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity() + math.copysign(dot_product(j, p.getVelocity()), 1)*p.getVelocity().Y()))
+        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity() - p.getVelocity().Y()))
     elif wall.getSide() == "bottom":
         p.setPosition(Vector(p.getPosition().X(), wall.getPosition() - p.getRadius()))
-        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity() + math.copysign(dot_product((-1)*j, p.getVelocity()), 1)*p.getVelocity().Y()))
+        p.setVelocity(Vector(p.getVelocity().X(), -wall.getVelocity() - p.getVelocity().Y()))
     elif wall.getSide() == "left":
         p.setPosition(Vector(wall.getPosition() + p.getRadius(), p.getPosition().Y()))
-        p.setVelocity(Vector(wall.getVelocity() + math.copysign(dot_product(i, p.getVelocity()), 1)*p.getVelocity().X(), p.getVelocity().Y()))
+        p.setVelocity(Vector(wall.getVelocity() - p.getVelocity().X(), p.getVelocity().Y()))
     elif wall.getSide() == "right":
         p.setPosition(Vector(wall.getPosition() - p.getRadius(), p.getPosition().Y()))
-        p.setVelocity(Vector(wall.getVelocity() + math.copysign(dot_product((-1)*i, p.getVelocity()), 1)*p.getVelocity().X(), p.getVelocity().Y()))
+        p.setVelocity(Vector(-wall.getVelocity() - p.getVelocity().X(), p.getVelocity().Y()))
 
 
 def circles_scatter(p1, p2):
