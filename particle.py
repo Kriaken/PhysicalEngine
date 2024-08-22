@@ -40,8 +40,11 @@ class Particle(RigidBody):
     def getRadius(self):
         return self.radius
 
-    def draw(self, screen):
-        pygame.draw.circle(screen, "black", (self.getPosition().X(), self.getPosition().Y()), self.getRadius())
+    def draw(self, screen, x=0, y=0):
+        if x and y:
+            pygame.draw.circle(screen, ((255/9)*self.getMass() - 255/9, 0, -(255/9)*self.getMass() + (10/9)*255), (x, y), self.getRadius())
+        else:
+            pygame.draw.circle(screen, ((255/9)*self.getMass() - 255/9, 0, -(255/9)*self.getMass() + (10/9)*255), (self.getPosition().X(), self.getPosition().Y()), self.getRadius())
 
 
 def circles_collision(p1, p2):

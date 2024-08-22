@@ -1,6 +1,7 @@
 from particle import *
 from vector import *
 from wall import *
+import pygame
 
 class Simulation:
 
@@ -46,9 +47,17 @@ class Simulation:
     def draw(self, screen):
 
         #Добавить рисование поля
+        top_padding = bottom_padding = (0.1/0.9)*self.height/2
+        left_padding = right_padding = (0.1/0.9)*self.width/2
+
+        screen.fill("#333333")
+
+        field = pygame.Rect(left_padding, top_padding, self.width, self.height)
+        pygame.draw.rect(screen, "white", field)
+        pygame.draw.rect(screen, "black", field, int(0.1*left_padding))
 
         for i in range(len(self.particles)):
-            self.particles[i].draw(screen)
+            self.particles[i].draw(screen, self.particles[i].getPosition().X() + left_padding, self.particles[i].getPosition().Y() + top_padding)
 
     def apply_gravity(self):
         for j in range(len(self.particles)):
