@@ -9,6 +9,11 @@ class Wall:
         self.acceleration_function = acceleration_function
         self.velocity = velocity0
 
+    def move(self, t, dt):
+        if self.acceleration_function != 0:
+            self.setVelocity(self.acceleration_function(t))
+            self.setPosition(self.getPosition() + self.getVelocity()*dt)
+
     def setPosition(self, position):
         self.position = position
 

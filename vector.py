@@ -34,7 +34,11 @@ class Vector:
         return (self.X()**2 + self.Y()**2)**(1/2)
     
     def normalize(self):
-        self = (1/math.sqrt(self.vector_length()))*self
+        length = self.vector_length()
+        
+        self.setX(self.X()/length)
+        self.setY(self.Y()/length)
+        
     
     def project_onto(self, b):
         if (b.vector_length() != 1):

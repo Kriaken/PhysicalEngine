@@ -2,23 +2,29 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from simulation import *
 import random
+import numpy as np
 
-p1 = Particle(Vector(5, 15), Vector(0, 0), 1, 2)
-p2 = Particle(Vector(10, 15), Vector(-10, 0), 1, 2)
-p3 = Particle(Vector(20, 15), Vector(0, 0), 1, 2)
+p1 = Particle(Vector(500, 500), Vector(0, 0), 1, 10)
+p2 = Particle(Vector(400, 500), Vector(10, 0), 1, 10)
+#p3 = Particle(Vector(20, 15), Vector(0, 0), 1, 2)
 
 particles = []
 
-#for i in range(50):
-#    particles.append(Particle(Vector(random.randrange(100, 1400), random.randrange(100, 800)), Vector(random.randrange(-50, 50), random.randrange(-10, 10)), 1, 20))
+for i in range(0):
+    particles.append(Particle(Vector(random.randrange(100, 1400), random.randrange(100, 800)), Vector(random.randrange(-50, 50), random.randrange(-10, 10)), 1, 20))
 
-for i in range(50):
-    particles.append(Particle(Vector(random.randrange(100, 400), random.randrange(100, 200)), Vector(0, 0), random.randrange(1, 10), 10))
+for i in range(20):
+    particles.append(Particle(Vector(random.randrange(100, 300), random.randrange(100, 900)), Vector(0, 0), 10, 10))
+#
+for i in range(5):
+    particles.append(Particle(Vector(random.randrange(100, 300), random.randrange(100, 900)), Vector(0, 0), 1, 30))
 
 #particles = [Particle(Vector(2.1, 2.1), Vector(10, 30), 10, 2)]
 
 #walls = [Wall("top", 0, 0), Wall("bottom", 0, 100), Wall("left", 0, 0), Wall("right", 0, 0)]
-walls = []
+
+def acceleration(t):
+    return 20*math.cos(t)
 
 t = 0
 
@@ -89,9 +95,11 @@ positions = []
 #plt.show()
 #
 
-WIDTH = 500
-HEIGHT = 300
+WIDTH = 400
+HEIGHT = 900
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+walls = [Wall("top", 0, 0), Wall("bottom", acceleration, 0), Wall("left", 0, 0), Wall("right", 0, 0)]
 
 simulation = Simulation(particles, walls, 0.9*WIDTH, 0.9*HEIGHT, Vector(0, 10), 1000/60, 1)
 

@@ -6,6 +6,7 @@ import pygame
 class Simulation:
 
     def __init__(self, particles, walls, width, height, gravity, dt, substeps):
+        self.time = 0
         self.particles = particles
         self.width = width
         self.height = height
@@ -14,16 +15,13 @@ class Simulation:
         self.g = gravity
 
         if len(walls) != 0:
+
             self.walls = walls
 
-            twalls = []
-
-            twalls.append(self.find_wall(Wall.getSide("top")).setPosition(0))
-            twalls.append(self.find_wall(Wall.getSide("bottom")).setPosition(self.height))
-            twalls.append(self.find_wall(Wall.getSide("left")).setPosition(0))
-            twalls.append(self.find_wall(Wall.getSide("right")).setPosition(self.width))
-
-            self.walls = twalls
+            self.find_wall("top").setPosition(0)
+            self.find_wall("bottom").setPosition(self.height)
+            self.find_wall("left").setPosition(0)
+            self.find_wall("right").setPosition(self.width)
         else:
             self.walls = [Wall("top", 0, 0, 0), Wall("bottom", 0, 0, height), Wall("left", 0, 0, 0), Wall("right", 0, 0, width)]
 
@@ -44,6 +42,11 @@ class Simulation:
         for p in self.particles:
             p.move(self.dt*self.substeps)
 
+        for wall in self.walls:
+                wall.move(self.time, self.dt*self.substeps)
+        
+        self.time += self.dt*self.substeps
+
     def draw(self, screen):
 
         #Добавить рисование поля
@@ -52,7 +55,17 @@ class Simulation:
 
         screen.fill("#333333")
 
-        field = pygame.Rect(left_padding, top_padding, self.width, self.height)
+        #field = pygame.Rect(left_padding + self.find_wall("left").getPosition(), top_padding + self.find_wall("top").getPosition())
+        x = left_padding + self.find_wall("left").getPosition()
+        y = top_padding + self.find_wall("top").getPosition()
+
+        w = self.width - self.find_wall("left").getPosition() - (self.width - self.find_wall("right").getPosition())
+        h = self.height - self.find_wall("top").getPosition() - (self.height - self.find_wall("bottom").getPosition())
+        
+        #field = pygame.Rect(x, y, self.width, self.height)
+
+        field = pygame.Rect(x, y, w, h)
+
         pygame.draw.rect(screen, "white", field)
         pygame.draw.rect(screen, "black", field, int(0.1*left_padding))
 
@@ -85,4 +98,10 @@ class Simulation:
         if particle.getPosition().Y() >= self.find_wall("bottom").getPosition() - particle.getRadius():
             
             wall_scattering(particle, self.find_wall("bottom"))
+
+    def setWidth(self, width):
+        self.width = width
+
+    def setHeight(self, height):
+        self.height = height
         

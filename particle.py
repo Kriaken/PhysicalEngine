@@ -62,16 +62,16 @@ def wall_scattering(p, wall):
 
     if wall.getSide() == "top":
         p.setPosition(Vector(p.getPosition().X(), wall.getPosition() + p.getRadius()))
-        p.setVelocity(Vector(p.getVelocity().X(), wall.getVelocity() - p.getVelocity().Y()))
+        p.setVelocity(Vector(p.getVelocity().X(), -p.getVelocity().Y() + 2*wall.getVelocity()))
     elif wall.getSide() == "bottom":
         p.setPosition(Vector(p.getPosition().X(), wall.getPosition() - p.getRadius()))
-        p.setVelocity(Vector(p.getVelocity().X(), -wall.getVelocity() - p.getVelocity().Y()))
+        p.setVelocity(Vector(p.getVelocity().X(), -p.getVelocity().Y() - 2*wall.getVelocity()))
     elif wall.getSide() == "left":
         p.setPosition(Vector(wall.getPosition() + p.getRadius(), p.getPosition().Y()))
-        p.setVelocity(Vector(wall.getVelocity() - p.getVelocity().X(), p.getVelocity().Y()))
+        p.setVelocity(Vector(-p.getVelocity().X() + 2*wall.getVelocity(), p.getVelocity().Y()))
     elif wall.getSide() == "right":
         p.setPosition(Vector(wall.getPosition() - p.getRadius(), p.getPosition().Y()))
-        p.setVelocity(Vector(-wall.getVelocity() - p.getVelocity().X(), p.getVelocity().Y()))
+        p.setVelocity(Vector(-p.getVelocity().X() - 2*wall.getVelocity(), p.getVelocity().Y()))
 
 
 def circles_scatter(p1, p2):
@@ -101,15 +101,21 @@ def circles_scatter(p1, p2):
 
     dl = (p1.getRadius() + p2.getRadius()) - (p1.getPosition() - p2.getPosition()).vector_length()
     dr = p1.getPosition() - p2.getPosition()
-    a = (p1.getPosition().Y() - p2.getPosition().Y())/(p1.getPosition().X() - p2.getPosition().X())
+    dr.normalize()
 
-    dl1 = Vector((p1.getMass()/(p1.getMass() + p2.getMass()))*dl/math.sqrt(a**2 + 1), (a*(p1.getMass()/(p1.getMass() + p2.getMass()))*dl)/math.sqrt(a**2 + 1))
-    dl2 = Vector((p2.getMass()/(p1.getMass() + p2.getMass()))*dl/math.sqrt(a**2 + 1), (a*(p2.getMass()/(p1.getMass() + p2.getMass()))*dl)/math.sqrt(a**2 + 1))
+    dl1 = (p1.getMass()/(p1.getMass() + p2.getMass()))*dl*dr
 
-    if (dot_product(dr, dl1) < 0):
-        dl1 = (-1)*dl1
-    else:
-        dl2 = (-1)*dl2
+    dl2 = -(p2.getMass()/(p1.getMass() + p2.getMass()))*dl*dr
+
+    #a = (p1.getPosition().Y() - p2.getPosition().Y())/(p1.getPosition().X() - p2.getPosition().X())
+#
+    #dl1 = Vector((p1.getMass()/(p1.getMass() + p2.getMass()))*dl/math.sqrt(a**2 + 1), (a*(p1.getMass()/(p1.getMass() + p2.getMass()))*dl)/math.sqrt(a**2 + 1))
+    #dl2 = Vector((p2.getMass()/(p1.getMass() + p2.getMass()))*dl/math.sqrt(a**2 + 1), (a*(p2.getMass()/(p1.getMass() + p2.getMass()))*dl)/math.sqrt(a**2 + 1))
+#
+    #if (dot_product(dr, dl1) < 0):
+    #    dl1 = (-1)*dl1
+    #else:
+    #    dl2 = (-1)*dl2
 
     p1.setPosition(p1.getPosition() + dl1)
     p2.setPosition(p2.getPosition() + dl2)
