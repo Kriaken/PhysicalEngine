@@ -1,6 +1,6 @@
 from vector import *
 
-#Class for supermassive walls with velocity as a function of time
+#Class for supermassive walls with acceleration as a function of time
 class Wall:
     
     def __init__(self, side, acceleration_function = 0, velocity0 = 0, position = 0):

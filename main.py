@@ -13,18 +13,18 @@ particles = []
 for i in range(0):
     particles.append(Particle(Vector(random.randrange(100, 1400), random.randrange(100, 800)), Vector(random.randrange(-50, 50), random.randrange(-10, 10)), 1, 20))
 
-for i in range(20):
-    particles.append(Particle(Vector(random.randrange(100, 300), random.randrange(100, 900)), Vector(0, 0), 10, 10))
+for i in range(50):
+    particles.append(Particle(Vector(random.randrange(100, 300), random.randrange(600, 900)), Vector(0, 0), 100, 5))
 #
 for i in range(5):
-    particles.append(Particle(Vector(random.randrange(100, 300), random.randrange(100, 900)), Vector(0, 0), 1, 30))
+    particles.append(Particle(Vector(random.randrange(100, 300), random.randrange(600, 900)), Vector(0, 0), 10, 30))
 
 #particles = [Particle(Vector(2.1, 2.1), Vector(10, 30), 10, 2)]
 
 #walls = [Wall("top", 0, 0), Wall("bottom", 0, 100), Wall("left", 0, 0), Wall("right", 0, 0)]
 
 def acceleration(t):
-    return 20*math.cos(t)
+    return 50*math.cos(5*t)
 
 t = 0
 
@@ -101,11 +101,11 @@ SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 walls = [Wall("top", 0, 0), Wall("bottom", acceleration, 0), Wall("left", 0, 0), Wall("right", 0, 0)]
 
-simulation = Simulation(particles, walls, 0.9*WIDTH, 0.9*HEIGHT, Vector(0, 10), 1000/60, 1)
+simulation = Simulation(particles, walls, 0.9*WIDTH, 0.9*HEIGHT, Vector(0, 1), 1000/60, 10, k = 0.9)
 
-simulating = True
+simulating = 0
 
-while simulating:
+while simulating < 1e6:
 
     simulation.time_step()
     simulation.draw(SCREEN)
@@ -114,4 +114,6 @@ while simulating:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            simulating = False
+            simulating = 1e6
+    
+    simulating += 1000/60

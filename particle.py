@@ -3,6 +3,7 @@ import math
 from vector import *
 from wall import *
 
+#RigidBody is an arbitral physical object, that can interact with other objects. Used as ancestor for specific physical bodies
 class RigidBody:
 
     def __init__(self, position, velocity, mass):
@@ -31,6 +32,7 @@ class RigidBody:
     def setVelocity(self, velocity):
         self.velocity = velocity
 
+#Descendant class of RigidBody class. Describes particle as round physical body
 class Particle(RigidBody):
 
     def __init__(self, position, velocity, mass, radius):
@@ -42,11 +44,11 @@ class Particle(RigidBody):
 
     def draw(self, screen, x=0, y=0):
         if x and y:
-            pygame.draw.circle(screen, ((255/9)*self.getMass() - 255/9, 0, -(255/9)*self.getMass() + (10/9)*255), (x, y), self.getRadius())
+            pygame.draw.circle(screen, (255 , 0, 0), (x, y), self.getRadius())
         else:
-            pygame.draw.circle(screen, ((255/9)*self.getMass() - 255/9, 0, -(255/9)*self.getMass() + (10/9)*255), (self.getPosition().X(), self.getPosition().Y()), self.getRadius())
+            pygame.draw.circle(screen, (255, 0, 0), (self.getPosition().X(), self.getPosition().Y()), self.getRadius())
 
-
+#Function to detect collision beetwen objects of Particle class
 def circles_collision(p1, p2):
 
     l = Vector(p1.getPosition().X() - p2.getPosition().X(), p1.getPosition().Y() - p2.getPosition().Y())
@@ -56,25 +58,24 @@ def circles_collision(p1, p2):
 
     return False
 
-def wall_scattering(p, wall):
-    i = Vector(1, 0)
-    j = Vector(0, 1)
+#Function for scattering Particles of supermassive walls of Simulation box
+def wall_scattering(p, wall, k=1):
 
     if wall.getSide() == "top":
         p.setPosition(Vector(p.getPosition().X(), wall.getPosition() + p.getRadius()))
-        p.setVelocity(Vector(p.getVelocity().X(), -p.getVelocity().Y() + 2*wall.getVelocity()))
+        p.setVelocity(Vector(p.getVelocity().X(), -k*p.getVelocity().Y() + (1 + k)*wall.getVelocity()))
     elif wall.getSide() == "bottom":
         p.setPosition(Vector(p.getPosition().X(), wall.getPosition() - p.getRadius()))
-        p.setVelocity(Vector(p.getVelocity().X(), -p.getVelocity().Y() - 2*wall.getVelocity()))
+        p.setVelocity(Vector(p.getVelocity().X(), -k*p.getVelocity().Y() - (1 + k)*wall.getVelocity()))
     elif wall.getSide() == "left":
         p.setPosition(Vector(wall.getPosition() + p.getRadius(), p.getPosition().Y()))
-        p.setVelocity(Vector(-p.getVelocity().X() + 2*wall.getVelocity(), p.getVelocity().Y()))
+        p.setVelocity(Vector(-k*p.getVelocity().X() + (1 + k)*wall.getVelocity(), p.getVelocity().Y()))
     elif wall.getSide() == "right":
         p.setPosition(Vector(wall.getPosition() - p.getRadius(), p.getPosition().Y()))
         p.setVelocity(Vector(-p.getVelocity().X() - 2*wall.getVelocity(), p.getVelocity().Y()))
 
-
-def circles_scatter(p1, p2):
+#Function for scattering Particles
+def circles_scatter(p1, p2, k=1):
 
     v1i = p1.getVelocity()
     v2i = p2.getVelocity()
@@ -93,8 +94,8 @@ def circles_scatter(p1, p2):
     v21i_x = v21i.project_onto(i_versor)
     v21i_y = v21i.project_onto(j_versor)
 
-    v1f_x = ((2*m2)/(m1 + m2))*v21i_x
-    v2f_x = ((m2 - m1)/(m1 + m2))*v21i_x
+    v1f_x = (((1 + k)*m2)/(m1 + m2))*v21i_x
+    v2f_x = ((m2 - k*m1)/(m1 + m2))*v21i_x
 
     p1.setVelocity(v1f_x + v1i)
     p2.setVelocity(v2f_x + v21i_y + v1i)
@@ -119,14 +120,3 @@ def circles_scatter(p1, p2):
 
     p1.setPosition(p1.getPosition() + dl1)
     p2.setPosition(p2.getPosition() + dl2)
-"""
-p1 = Particle(Vector(1, 0), Vector(1, 0), 1, 2)
-p2 = Particle(Vector(2, 0), Vector(0, 0), 1, 2)
-
-print(p1.getVelocity().X(), p1.getVelocity().Y(), p2.getVelocity().X(), p2.getVelocity().Y())
-
-circles_scatter(p1, p2)
-
-print("x1", p1.getPosition().X(), "y1", p1.getPosition().Y(), "x2", p2.getPosition().X(), "y2", p2.getPosition().Y())
-print(p1.getVelocity().X(), p1.getVelocity().Y(), p2.getVelocity().X(), p2.getVelocity().Y())
-"""

@@ -1,5 +1,6 @@
 import math
 
+#Custom Vector class describing 2D vector with methods and functions for vector algebra
 class Vector:
 
     def __init__(self, x, y):
@@ -39,18 +40,21 @@ class Vector:
         self.setX(self.X()/length)
         self.setY(self.Y()/length)
         
-    
+    #Function to get projection of given vector a on vector b
     def project_onto(self, b):
         if (b.vector_length() != 1):
             return (dot_product(self, b)*b)*math.pow(b.vector_length(), -2)
         return dot_product(self, b)*b
 
+#Function for dot product of two vectors
 def dot_product(a, b):
     return a.X()*b.X() + a.Y()*b.Y()
 
+#Function for calculating the angle between two vectors
 def angle_vectors(a, b):
     return math.acos(dot_product(a, b)/(a.vector_length()*b.vector_length()))
 
+#Function for cross product of two vectors
 def cross_product(a, b):
     phi = angle_vectors(a, b)
 
